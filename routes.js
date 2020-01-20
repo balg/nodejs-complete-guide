@@ -1,6 +1,7 @@
 const handlerRequest = (req, res) => {
   const { url, method } = req;
   if (url === '/') {
+    res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>Assignment Nr 1. - Home</title></head>');
     res.write(`
@@ -15,6 +16,7 @@ const handlerRequest = (req, res) => {
     return res.end();
   }
   if (url === '/users') {
+    res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>Assignment Nr 1. - Users</title></head>');
     res.write('<body><h1>Users</h1><ul><li>User 1</li><li>User 2</li><li>User 3</li></ul></body>');
