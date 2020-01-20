@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/balg/nodejs-complete-guide/issues"
   },
-  "homepage": "https://github.com/balg/nodejs-complete-guide#readme"
+  "homepage": "https://github.com/balg/nodejs-complete-guide#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
