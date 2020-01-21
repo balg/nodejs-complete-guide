@@ -6,7 +6,7 @@ const router = express.Router(); // Router is like an app inside of the express 
 
 // /admin/add-product => GET
 router.get('/add-product', (req, res) => {
-  res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'add-product.html'));
 });
 
 // /admin/add-product => POST
