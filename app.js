@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const adminRoutes = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminRoutes); // adminRoutes is a valid middleware function
+app.use('/admin', adminData.routes); // adminData.routes is a valid middleware function
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
