@@ -18,7 +18,9 @@ app.use('/admin', adminData.routes); // adminData.routes is a valid middleware f
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).render('404');
+  res.status(404).render('404', {
+    docTitle: 'Page Not Found',
+  });
 });
 
 app.listen(3000);

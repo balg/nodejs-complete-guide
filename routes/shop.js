@@ -11,7 +11,8 @@ router.get('/', (req, res) => {
   const { products } = adminData;
   res.render('shop', {
     products,
-    docTitle: 'Shop'
+    docTitle: 'Shop',
+    path: '/',
   });
 });
 
