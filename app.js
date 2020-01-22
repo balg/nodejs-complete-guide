@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', 'views'); // pwd/views is the defult setting so it's not really necessary here
+
 const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
