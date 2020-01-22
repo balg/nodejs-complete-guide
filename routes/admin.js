@@ -11,7 +11,7 @@ const products = [];
 // /admin/add-product => GET
 router.get('/add-product', (req, res) => {
   res.render('add-product', {
-    docTitle: 'Add Product',
+    pageTitle: 'Add Product',
     path: '/admin/add-product',
   })
 });

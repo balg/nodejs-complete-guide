@@ -2,10 +2,15 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const expressHbs = require('express-handlebars');
 
 const app = express();
 
-app.set('view engine', 'pug');
+app.engine('hbs', expressHbs({
+  defaultLayout: '',
+  layoutsDir: '',
+}));
+app.set('view engine', 'hbs');
 app.set('views', 'views'); // pwd/views is the defult setting so it's not really necessary here
 
 const adminData = require('./routes/admin');
@@ -19,7 +24,7 @@ app.use(shopRoutes);
 
 app.use((req, res, next) => {
   res.status(404).render('404', {
-    docTitle: 'Page Not Found',
+    pageTitle: 'Page Not Found',
   });
 });
 
