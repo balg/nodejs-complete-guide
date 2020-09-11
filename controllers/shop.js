@@ -1,4 +1,6 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
+const errorController = require("./error");
 
 exports.getShop = (req, res) => {
   Product.fetchAll((products) => {
@@ -15,6 +17,16 @@ exports.getCart = (req, res) => {
     pageTitle: "Cart",
     path: "/cart",
   });
+};
+
+exports.postCart = (req, res, next) => {
+  const { id } = req.body;
+  Product.findById(id, product => {
+    if (product) {
+      Cart.addProduct(id, product.price)
+    }
+    res.redirect('/cart');
+  })
 };
 
 exports.getOrders = (req, res) => {
