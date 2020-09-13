@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+const Cart = require("./cart");
 const rootDir = require("../util/path");
 const fileUtils = require("../util/file");
 
@@ -19,14 +20,22 @@ module.exports = class Product {
     fileUtils.read(storageFile, (parsedContent) => {
       const products = parsedContent || [];
       if (this.id) {
-        const ownIndex = products.findIndex(p => p.id === this.id)
-        const updatedProduct = { ...products[ownIndex], ...this }
-        products[ownIndex] = updatedProduct
+        const ownIndex = products.findIndex((p) => p.id === this.id);
+        const updatedProduct = { ...products[ownIndex], ...this };
+        products[ownIndex] = updatedProduct;
       } else {
         this.id = Math.random().toString();
         products.push(this);
       }
       fileUtils.write(storageFile, products);
+    });
+  }
+
+  delete() {
+    fileUtils.read(storageFile, (parsedContent) => {
+      const products = (parsedContent || []).filter((p) => p.id !== this.id);
+      fileUtils.write(storageFile, products);
+      Cart.deleteProduct(this.id, this.price);
     });
   }
 
@@ -39,7 +48,11 @@ module.exports = class Product {
   static findById(id, cb) {
     fileUtils.read(storageFile, (parsedContent) => {
       const product = (parsedContent || []).find((p) => p.id === id);
-      cb(product);
+      cb(Product.fromObject(product));
     });
+  }
+
+  static fromObject({ id, title, imageUrl, description, price }) {
+    return new Product(id, title, imageUrl, description, price);
   }
 };

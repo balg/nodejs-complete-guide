@@ -1,9 +1,4 @@
 {
-  "products": [
-    {
-      "id": "0.49786543909109016",
-      "qty": 2
-    }
-  ],
-  "totalPrice": 199.98
+  "products": [],
+  "totalPrice": 0
 }

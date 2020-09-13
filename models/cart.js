@@ -35,4 +35,17 @@ module.exports = class Cart {
       cb(parsedContent || { ...emptyCart });
     });
   }
+
+  static deleteProduct(id, price) {
+    fileUtil.read(storageFile, (parsedContent) => {
+      if (!parsedContent) {
+        return;
+      }
+      const updatedCart = { ...parsedContent };
+      const productIndex = updatedCart.products.findIndex((p) => p.id === id);
+      updatedCart.totalPrice -= updatedCart.products[productIndex].qty * price;
+      updatedCart.products.splice(productIndex, 1);
+      fileUtil.write(storageFile, updatedCart);
+    });
+  }
 };
