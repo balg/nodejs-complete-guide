@@ -3,7 +3,7 @@ const Cart = require("../models/cart");
 const errorController = require("./error");
 
 exports.getShop = (req, res) => {
-  Product.fetchAll()
+  Product.findAll()
     .then((products) => {
       res.render("shop/index", {
         prods: products,
