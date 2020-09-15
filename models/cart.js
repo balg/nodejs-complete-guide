@@ -30,12 +30,6 @@ module.exports = class Cart {
     });
   }
 
-  static getContent(cb) {
-    fileUtil.read(storageFile, (parsedContent) => {
-      cb(parsedContent || { ...emptyCart });
-    });
-  }
-
   static deleteProduct(id, price) {
     fileUtil.read(storageFile, (parsedContent) => {
       if (!parsedContent) {
@@ -43,9 +37,18 @@ module.exports = class Cart {
       }
       const updatedCart = { ...parsedContent };
       const productIndex = updatedCart.products.findIndex((p) => p.id === id);
+      if (productIndex < 0) {
+        return;
+      }
       updatedCart.totalPrice -= updatedCart.products[productIndex].qty * price;
       updatedCart.products.splice(productIndex, 1);
       fileUtil.write(storageFile, updatedCart);
+    });
+  }
+
+  static getCart(cb) {
+    fileUtil.read(storageFile, (parsedContent) => {
+      cb(parsedContent || { ...emptyCart });
     });
   }
 };
