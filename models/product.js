@@ -1,11 +1,6 @@
-const fs = require("fs");
-const path = require("path");
+const db = require("../util/database");
 
 const Cart = require("./cart");
-const rootDir = require("../util/path");
-const fileUtils = require("../util/file");
-
-const storageFile = path.join(rootDir, "data", "products.json");
 
 module.exports = class Product {
   constructor(id, title, imageUrl, description, price) {
@@ -16,43 +11,28 @@ module.exports = class Product {
     this.price = price;
   }
 
+  static tableName = "products";
+
   save() {
-    fileUtils.read(storageFile, (parsedContent) => {
-      const products = parsedContent || [];
-      if (this.id) {
-        const ownIndex = products.findIndex((p) => p.id === this.id);
-        const updatedProduct = { ...products[ownIndex], ...this };
-        products[ownIndex] = updatedProduct;
-      } else {
-        this.id = Math.random().toString();
-        products.push(this);
-      }
-      fileUtils.write(storageFile, products);
-    });
+    return db.execute(
+      `INSERT INTO ${Product.tableName} (title, price, imageUrl, description) VALUES (?,?,?,?)`,
+      [this.title, this.price, this.imageUrl, this.description]
+    );
   }
 
-  delete() {
-    fileUtils.read(storageFile, (parsedContent) => {
-      const products = (parsedContent || []).filter((p) => p.id !== this.id);
-      fileUtils.write(storageFile, products);
-      Cart.deleteProduct(this.id, this.price);
-    });
+  delete() {}
+
+  static async fetchAll() {
+    const [rows] = await db.execute(`SELECT * FROM ${Product.tableName}`);
+    return rows;
   }
 
-  static fetchAll(cb) {
-    fileUtils.read(storageFile, (parsedContent) => {
-      cb(parsedContent || []);
-    });
-  }
-
-  static findById(id, cb) {
-    fileUtils.read(storageFile, (parsedContent) => {
-      const product = (parsedContent || []).find((p) => p.id === id);
-      cb(Product.fromObject(product));
-    });
-  }
-
-  static fromObject({ id, title, imageUrl, description, price }) {
-    return new Product(id, title, imageUrl, description, price);
+  static async findById(id) {
+    const [
+      rows,
+    ] = await db.execute(`SELECT * FROM ${Product.tableName} WHERE id = ?`, [
+      id,
+    ]);
+    return rows.length ? rows[0] : null;
   }
 };

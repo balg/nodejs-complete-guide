@@ -3,13 +3,15 @@ const Cart = require("../models/cart");
 const errorController = require("./error");
 
 exports.getShop = (req, res) => {
-  Product.fetchAll((products) => {
-    res.render("shop/index", {
-      prods: products,
-      pageTitle: "Shop",
-      path: "/",
-    });
-  });
+  Product.fetchAll()
+    .then((products) => {
+      res.render("shop/index", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.getCart = (req, res) => {

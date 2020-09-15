@@ -18,22 +18,28 @@ exports.postAddProduct = (req, res, next) => {
     description,
     parseFloat(price)
   );
-  product.save();
-  res.redirect("/");
+  product
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.getEditProduct = (req, res, next) => {
   const { id } = req.params;
-  Product.findById(id, (product) => {
-    if (product) {
-      return res.render("admin/edit-product", {
-        pageTitle: "Edit Product",
-        path: "/admin/edit-product",
-        product,
-      });
-    }
-    errorController.get404(req, res, next);
-  });
+  Product.findById(id)
+    .then((product) => {
+      if (product) {
+        return res.render("admin/edit-product", {
+          pageTitle: "Edit Product",
+          path: "/admin/edit-product",
+          product,
+        });
+      }
+      errorController.get404(req, res, next);
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -50,38 +56,43 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "Products",
-      path: "/products",
-    });
-  });
+  Product.fetchAll()
+    .then((products) => {
+      res.render("shop/product-list", {
+        prods: products,
+        pageTitle: "Products",
+        path: "/products",
+      });
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.getProduct = (req, res, next) => {
   const { id } = req.params;
-  Product.findById(id, (product) => {
-    if (product) {
-      res.render("shop/product-detail", {
-        product,
-        pageTitle: product.title,
-        path: `/products`,
-      });
-      return;
-    }
-    errorController.get404(req, res, next);
-  });
+  Product.findById(id)
+    .then((product) => {
+      if (product) {
+        return res.render("shop/product-detail", {
+          product,
+          pageTitle: product.title,
+          path: `/products`,
+        });
+      }
+      errorController.get404(req, res, next);
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.getAdminProducts = (req, res) => {
-  Product.fetchAll((products) => {
-    res.render("admin/products", {
-      prods: products,
-      pageTitle: "Admin Products",
-      path: "/admin/products",
-    });
-  });
+  Product.fetchAll()
+    .then((products) => {
+      res.render("admin/products", {
+        prods: products,
+        pageTitle: "Admin Products",
+        path: "/admin/products",
+      });
+    })
+    .catch((error) => console.error(error));
 };
 
 exports.postDeleteProduct = (req, res) => {
