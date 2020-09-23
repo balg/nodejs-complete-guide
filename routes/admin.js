@@ -13,11 +13,11 @@ router.get("/add-product", productsController.getAddProduct);
 router.post("/add-product", productsController.postAddProduct);
 
 // /admin/products => GET
-// router.get('/products', productsController.getAdminProducts);
+router.get("/products", productsController.getAdminProducts);
 
-// router.get('/edit-product/:id', productsController.getEditProduct);
+router.get("/edit-product/:id", productsController.getEditProduct);
 
-// router.post('/edit-product', productsController.postEditProduct);
+router.post("/edit-product", productsController.postEditProduct);
 
 // router.post('/delete-product', productsController.postDeleteProduct);
 
