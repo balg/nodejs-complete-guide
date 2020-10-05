@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
+const User = require("./models/user");
 
 const app = express();
 
@@ -19,13 +20,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // let userId;
 app.use((req, res, next) => {
-  // User.findByPk(userId)
-  //   .then((user) => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch((err) => console.error(err));
-  next();
+  User.findById("5f7b32a67392816e9506b2bb")
+    .then((user) => {
+      req.user = user;
+    })
+    .catch(console.error)
+    .finally(next);
 });
 
 app.use("/admin", adminRoutes);

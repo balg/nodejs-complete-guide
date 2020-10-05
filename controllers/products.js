@@ -13,8 +13,17 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { body, user } = req;
+  console.log("exports.postAddProduct -> user", { user });
   const { title, imageUrl, price, description } = body;
-  const product = new Product(title, price, description, imageUrl);
+  const { _id: userId } = user;
+  const product = new Product(
+    title,
+    price,
+    description,
+    imageUrl,
+    null,
+    userId
+  );
   product
     .save()
     .then(() => {
@@ -111,13 +120,12 @@ exports.getAdminProducts = (req, res) => {
   //   .catch((error) => console.error(error));
 };
 
-// exports.postDeleteProduct = (req, res) => {
-//   const { id } = req.body;
-//   Product.findByPk(id)
-//     .then((product) => product.destroy())
-//     .then(() => {
-//       console.info("Deleted Product");
-//     })
-//     .catch((err) => console.error(err))
-//     .finally(() => res.redirect("/admin/products"));
-// };
+exports.postDeleteProduct = (req, res) => {
+  const { id } = req.body;
+  Product.deleteById(id)
+    .then(() => {
+      console.info("Deleted Product");
+    })
+    .catch(console.error)
+    .finally(() => res.redirect("/admin/products"));
+};
